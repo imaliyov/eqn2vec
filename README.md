@@ -3,9 +3,9 @@ Convert latex equations into SVG or PDF files.
 
 # Installation
 
-1. Clone the repository
+1. Clone the repository.
 
-2. cd eqn2vec
+2. Navigate to the `eqn2vec` folder and install with `pip`:
 ```
 pip install .
 ```
