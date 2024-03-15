@@ -18,6 +18,7 @@ from eqn2vec import eqn2vec
 eq_list = [ r'E = mc^2', r'g(x)=\frac{\partial f(x)}{\partial x}']
 eqn2vec.eqn2vec(eq_list, format='pdf')
 ```
+See also the `examples` folder.
 
 * as a command-line tool, in a terminal:
 ```bash
