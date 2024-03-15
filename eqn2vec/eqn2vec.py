@@ -224,7 +224,7 @@ def main():
 
     args = parser.parse_args()
 
-    eqn2vec(args.equations, format=args.format.lower(), keep=args.keep, latex_compiler=args.compiler)
+    eqn2vec(args.equations, style=args.style, format=args.format.lower(), keep=args.keep, latex_compiler=args.compiler)
 
 
 if __name__ == "__main__":

@@ -9,5 +9,6 @@ setup(
     packages=find_packages(),
     python_requires='>=3.9',
     install_requires=[
+    'latex',
     ],
 )
