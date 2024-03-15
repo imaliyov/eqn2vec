@@ -3,6 +3,7 @@ import os
 import subprocess
 from latex import build_pdf
 import argparse
+import time
 
 
 def check_environment(latex_compiler="pdflatex"):
@@ -38,7 +39,7 @@ def check_environment(latex_compiler="pdflatex"):
     return True
 
 
-def create_latex_file(equations, filename="equations.tex"):
+def create_latex_file(equations, style='display', filename="equations.tex"):
     """
     Creates a LaTeX file with each equation on a separate page.
     """
@@ -47,7 +48,7 @@ def create_latex_file(equations, filename="equations.tex"):
         # Write the LaTeX document header
         file.write("\\documentclass[multi=page, border=1pt]{standalone}\n")
         file.write("\\usepackage{amsmath}\n")
-        file.write("\\begin{document}\n")
+        file.write("\\begin{document}\n\n")
 
         # Add each equation in a separate 'page' environment
         for i, eq in enumerate(equations):
@@ -55,9 +56,23 @@ def create_latex_file(equations, filename="equations.tex"):
             print(f'Equation {i+1}: {eq}')
 
             file.write("\\begin{page}\n")
-            file.write(f"${eq}$\n")
-            file.write("\\end{page}\n")
 
+            if style == 'display':
+                #file.write("\\begin{equation*}\n")
+                #file.write(f"{eq}\n")
+                #file.write("\\end{equation*}\n")
+
+                #file.write(f"\\[\n{eq}\n\\]\n")
+
+                file.write(f"$ \displaystyle {eq}$\n")
+            elif style == 'inline':
+                file.write(f"${eq}$\n")
+            else:
+                raise ValueError("Invalid style. Must be 'display' or 'inline'.")
+
+            file.write("\\end{page}\n\n")
+
+        print()
         # Close the document
         file.write("\\end{document}\n")
 
@@ -128,6 +143,7 @@ def split_pdf(pdf_file, equations, format='svg', output_prefix="eqn"):
     elif format == 'pdf':
         output_file_list = pdf_file_list
 
+    print()
     for i, file in enumerate(output_file_list):
         print(f'Output file {i+1}: {file}')
 
@@ -136,7 +152,7 @@ def split_pdf(pdf_file, equations, format='svg', output_prefix="eqn"):
 
 def cleanup_files(latex_file="equations.tex", pdf_file="equations.pdf", format='svg'):
 
-    print(f'Cleaning up intermediate files.')
+    print(f'\nCleaning up intermediate files.')
     # Remove the LaTeX file
     if os.path.exists(latex_file):
         os.remove(latex_file)
@@ -161,7 +177,15 @@ def cleanup_files(latex_file="equations.tex", pdf_file="equations.pdf", format='
                 os.remove(pdf_file)
 
 
-def eqn2vec(equations, format='svg', keep=False, latex_compiler='latex'):
+def print_header():
+    print("="*20+"eqn2vec"+"="*20)
+
+
+def eqn2vec(equations, style='display', format='svg', keep=False, latex_compiler='latex'):
+
+    trun = time.perf_counter()
+
+    print_header()
 
     # Check equations type
     if not isinstance(equations, list):
@@ -169,7 +193,7 @@ def eqn2vec(equations, format='svg', keep=False, latex_compiler='latex'):
 
     check_environment(latex_compiler=latex_compiler)
 
-    latex_file = create_latex_file(equations)
+    latex_file = create_latex_file(equations, style=style)
 
     #latex_compiler = "latex"
     #latex_compiler = "pdflatex"
@@ -181,6 +205,7 @@ def eqn2vec(equations, format='svg', keep=False, latex_compiler='latex'):
     if not keep:
         cleanup_files(latex_file, compiled_pdf, format=format)
 
+    print("="*13+f"Done in {time.perf_counter()-trun:.2f} seconds"+"="*14+"\n")
 
 def main():
     #eq_list = []
@@ -195,6 +220,7 @@ def main():
     parser.add_argument('-f', '--format', default="svg", help="The format of the vector image files. Must be 'svg' or 'pdf'.")
     parser.add_argument('-c', '--compiler', default="latex", help="The LaTeX compiler to use. Must be 'latex' or 'pdflatex'.")
     parser.add_argument('-k', '--keep', action="store_true", help="Keep the intermediate LaTeX and PDF files.")
+    parser.add_argument('-s', '--style', default="display", help="The style of the LaTeX equations. Must be 'display' or 'inline'.")
 
     args = parser.parse_args()
 
