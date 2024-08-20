@@ -22,7 +22,7 @@ See also the `examples` folder.
 
 * as a command-line tool, in a terminal:
 ```bash
-<path-to-repo>eqn2vec/eqn2vec/eqn2vec.py> --help
-<path-to-repo>eqn2vec/eqn2vec/eqn2vec.py> --eq 'E = mc^2' 'S = \sum_{i=1}^n x_i'
+<path-to-repo>eqn2vec/eqn2vec/eqn2vec.py --help
+<path-to-repo>eqn2vec/eqn2vec/eqn2vec.py --eq 'E = mc^2' 'S = \sum_{i=1}^n x_i'
 ```
 
