@@ -47,7 +47,7 @@ def create_latex_file(equations, style='display', filename="equations.tex"):
     with open(filename, "w") as file:
         # Write the LaTeX document header
         file.write("\\documentclass[multi=page, border=1pt]{standalone}\n")
-        file.write("\\usepackage{amsmath}\n")
+        file.write("\\usepackage{amsmath, amssymb}\n")
         file.write("\\begin{document}\n\n")
 
         # Add each equation in a separate 'page' environment
